@@ -1,0 +1,21 @@
+Date,Product_Category,Region,Units_Sold,Unit_Price,Revenue,Status
+2024-01-05,Electronics,North,120,89.99,10798.80,Completed
+2024-01-07,Clothing,South,85,45.50,3867.50,Completed
+2024-01-10,Electronics,East,200,89.99,17998.00,Completed
+2024-01-12,Home & Garden,West,60,120.00,7200.00,Completed
+2024-01-15,Clothing,North,150,45.50,6825.00,Cancelled
+2024-01-18,Electronics,South,95,89.99,8549.05,Completed
+2024-01-20,Home & Garden,East,40,120.00,4800.00,Completed
+2024-01-22,Clothing,West,110,45.50,5005.00,Completed
+2024-01-25,Electronics,North,180,89.99,16198.20,Cancelled
+2024-01-28,Home & Garden,South,75,120.00,9000.00,Completed
+2024-02-01,Clothing,East,130,45.50,5915.00,Completed
+2024-02-05,Electronics,West,160,89.99,14398.40,Completed
+2024-02-08,Home & Garden,North,55,120.00,6600.00,Completed
+2024-02-10,Electronics,South,210,89.99,18897.90,Completed
+2024-02-14,Clothing,East,90,45.50,4095.00,Cancelled
+2024-02-17,Home & Garden,West,70,120.00,8400.00,Completed
+2024-02-20,Electronics,North,140,89.99,12598.60,Completed
+2024-02-22,Clothing,South,100,45.50,4550.00,Completed
+2024-02-25,Electronics,East,175,89.99,15748.25,Completed
+2024-02-28,Home & Garden,North,65,120.00,7800.00,Completed

@@ -1,24 +1,33 @@
-import { Resend } from "resend";
+import nodemailer from "nodemailer";
 import logger from "../config/logger.js";
 
 /**
- * Send the generated sales summary to the user via Resend API.
+ * Send the generated sales summary to the user via SMTP.
  */
 export async function sendEmail(
   to: string,
   summary: string
 ): Promise<void> {
-  const apiKey = process.env.RESEND_API_KEY;
+  const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS } = process.env;
 
-  if (!apiKey) {
+  if (!SMTP_HOST || !SMTP_PORT || !SMTP_USER || !SMTP_PASS) {
     logger.warn(
-      "RESEND_API_KEY is not configured. Skipping email delivery. Set it in your .env file."
+      "SMTP credentials not fully configured. Skipping email delivery. Set SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS in your .env file."
     );
     return;
   }
 
-  const resend = new Resend(apiKey);
+  const transporter = nodemailer.createTransport({
+    host: SMTP_HOST,
+    port: parseInt(SMTP_PORT, 10),
+    secure: parseInt(SMTP_PORT, 10) === 465, // true for 465, false for other ports
+    auth: {
+      user: SMTP_USER,
+      pass: SMTP_PASS,
+    },
+  });
 
+  // Convert markdown-style summary to basic HTML
   const htmlBody = `
 <!DOCTYPE html>
 <html>
@@ -64,24 +73,21 @@ export async function sendEmail(
 </body>
 </html>`;
 
-  logger.info(`Sending email to ${to} via Resend...`);
+  const mailOptions = {
+    from: `"Sales Insight Automator" <${SMTP_USER}>`,
+    to,
+    subject: "Sales Insight Summary",
+    text: summary,
+    html: htmlBody,
+  };
+
+  logger.info(`Sending email to ${to} via SMTP...`);
 
   try {
-    const { data, error } = await resend.emails.send({
-      from: "onboarding@resend.dev",
-      to: [to],
-      subject: "Sales Insight Summary",
-      text: summary,
-      html: htmlBody,
-    });
-
-    if (error) {
-      logger.error("Error from Resend API:", { error });
-      return;
-    }
-
-    logger.info("Email sent successfully via Resend", { id: data?.id });
+    const info = await transporter.sendMail(mailOptions);
+    logger.info("Email sent successfully", { messageId: info.messageId });
   } catch (error) {
-    logger.error("Failed to send email via Resend", { error });
+    logger.error("Failed to send email via SMTP", { error });
+    throw error;
   }
 }
